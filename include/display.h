@@ -13,6 +13,8 @@
 #ifndef DISPLAY_H
 # define DISPLAY_H
 
+#include "engine.h"
+
 void print_grid(t_engine *engine);
 
 
