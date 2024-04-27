@@ -6,7 +6,7 @@
 /*   By: bwisniew <bwisniew@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:47:00 by tdameros          #+#    #+#             */
-/*   Updated: 2024/04/27 23:31:57 by bwisniew         ###   ########.fr       */
+/*   Updated: 2024/04/28 00:36:51 by bwisniew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,17 @@
 
 int main(void) {
     setlocale(LC_ALL, "");
-    noecho();
     initscr();
+    noecho();
+    start_color();
+    init_pair(1, COLOR_BLACK, COLOR_RED);
+    
     keypad(stdscr,TRUE);
     t_engine engine = initialize_engine("bwisniew", 4);
 
   place_random_tile(&engine);
   place_random_tile(&engine);
-  // place_random_tile(&engine);
-  // place_random_tile(&engine);
-  // place_random_tile(&engine);
-  // place_random_tile(&engine);
-  // print_grid(&engine);
-  // sleep(2);
-  // play_move(&engine, UP);
-  // print_grid(&engine);
-  // sleep(2);
+ 
   
   int32_t c = 0;
   int8_t res = 0;

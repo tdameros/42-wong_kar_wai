@@ -6,6 +6,7 @@
 
 static void print_template(uint32_t x_start, uint32_t y_start, uint32_t size, uint32_t grid_size);
 static void print_number(uint32_t x, uint32_t y, uint32_t tile_size, uint32_t value);
+static void fill_tile(uint32_t start_x, uint32_t start_y, uint32_t tile_size);
 
 void print_grid(t_engine *engine) {
   uint32_t width;
@@ -29,7 +30,12 @@ void print_grid(t_engine *engine) {
     for (int32_t x = 0; x < engine->grid_size; x++) {
       uint32_t value = get_tile_coord(engine, x, y);
       if (value > 0)
+      {
+        attron(COLOR_PAIR(1));
+        fill_tile((x_start + x * (size * 2 / engine->grid_size)) , (y_start + y * size / engine->grid_size), size / engine->grid_size);
         print_number((x_start + x * (size * 2 / engine->grid_size)) , (y_start + y * size / engine->grid_size), size / engine->grid_size, value);
+        attroff(COLOR_PAIR(1));
+      }
     }
   }
   refresh();
@@ -81,3 +87,13 @@ static void print_number(uint32_t x, uint32_t y, uint32_t tile_size, uint32_t va
   uint32_t y_offset = y + tile_size / 2 ;
   mvprintw(y_offset, x_offset, "%d", value);
 }
+static void fill_tile(uint32_t start_x, uint32_t start_y, uint32_t tile_size)
+{
+  for (uint32_t x = start_x + 1; x < start_x + tile_size * 2; x++)
+  {
+    for (uint32_t y = start_y + 1; y < start_y + tile_size; y++)
+    {
+      mvprintw(y, x, " ");
+    }
+  }
+} 
