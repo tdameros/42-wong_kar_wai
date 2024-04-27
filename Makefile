@@ -1,6 +1,6 @@
 #*******************************  VARIABLES  **********************************#
 
-NAME			=	main
+NAME			=	2048
 
 # --------------- FILES --------------- #
 
@@ -41,7 +41,7 @@ all:			$(NAME)
 # ---------- VARIABLES RULES ---------- #
 
 $(NAME):		$(OBJ)
-				$(CC) $(CFLAGS) $(INCLUDES) -o $(NAME) $(OBJ)
+				$(CC) $(CFLAGS) $(INCLUDES) -o $(NAME) $(OBJ) -lncurses
 
 # ---------- COMPILED RULES ----------- #
 
@@ -50,6 +50,10 @@ $(NAME):		$(OBJ)
 $(DIR_BUILD)%.o: %.c
 				mkdir -p $(shell dirname $@)
 				$(CC) $(CFLAGS) $(DEP_FLAGS) $(INCLUDES) -c $< -o $@
+
+.PHONY: run
+run:	all
+				./$(NAME)
 
 .PHONY: clean
 clean:
