@@ -41,7 +41,7 @@ all:			$(NAME)
 # ---------- VARIABLES RULES ---------- #
 
 $(NAME):		$(OBJ)
-				$(CC) $(CFLAGS) $(INCLUDES) -o $(NAME) $(OBJ) -lncurses
+				$(CC) $(CFLAGS) $(INCLUDES) -o $(NAME) $(OBJ) -lncursesw
 
 # ---------- COMPILED RULES ----------- #
 
