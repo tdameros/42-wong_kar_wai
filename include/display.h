@@ -1,18 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.h                                             :+:      :+:    :+:   */
+/*   display.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tdameros <tdameros@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: bwisniew <bwisniew@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/26 19:51:00 by tdameros          #+#    #+#             */
-/*   Updated: 2024/04/26 19:51:00 by tdameros         ###   ########lyon.fr   */
+/*   Created: 2024/04/27 14:30:31 by bwisniew          #+#    #+#             */
+/*   Updated: 2024/04/27 14:30:49 by bwisniew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GOINFRE_42_WONG_KAR_WAI_INCLUDE_MAIN_H_
-# define GOINFRE_42_WONG_KAR_WAI_INCLUDE_MAIN_H_
+#ifndef DISPLAY_H
+# define DISPLAY_H
 
-# include <stdio.h>
+#include "engine.h"
+
+void print_grid(t_engine *engine);
+
 
 #endif
