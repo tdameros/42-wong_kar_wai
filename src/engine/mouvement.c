@@ -17,6 +17,7 @@ void play_move(t_engine *engine, t_move move) {
       play_all_move(engine, 0, 1, move);
       join_all_move(engine, 0, 1, move);
       play_all_move(engine, 0, 1, move);
+      break;
     case UP:
       play_all_move(engine, 0, 1, move);
       join_all_move(engine, 0, 1, move);
@@ -26,6 +27,7 @@ void play_move(t_engine *engine, t_move move) {
       play_all_move(engine, engine->grid_size - 1, -1, move);
       join_all_move(engine, engine->grid_size - 1, -1, move);
       play_all_move(engine, engine->grid_size - 1, -1, move);
+      break;
     default:
       break;
   }
