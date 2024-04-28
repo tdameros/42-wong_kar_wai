@@ -47,7 +47,7 @@ int8_t place_random_tile(t_engine *engine) {
 }
 
 static uint8_t generate_new_random_tile_value(void) {
-  return (rand() % 10 == 1 ? 4 : 2);
+  return (rand() % 10 == 1 ? NEW_TILE * 2 : NEW_TILE);
 }
 
 static uint8_t generate_new_random_position(t_engine *engine) {

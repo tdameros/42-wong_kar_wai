@@ -39,6 +39,7 @@ int main(void) {
   t_engine engine = initialize_engine("bwisniew", 4);
   int32_t c = 0;
   print_menu(engine.menu, &engine, engine.selected_button);
+  refresh();
   while (c != KEY_ESC) {
     c = getch();
     if (engine.menu == NO_MENU && play_move(&engine, c) &&
@@ -55,6 +56,7 @@ int main(void) {
       engine.win = true;
     }
     print_menu(engine.menu, &engine, engine.selected_button);
+    refresh();
   }
   endwin();
   return 0;
