@@ -11,7 +11,8 @@ static void print_number(uint32_t x, uint32_t y, uint32_t tile_size,
 static void fill_tile(uint32_t start_x, uint32_t start_y, uint32_t tile_size);
 static void print_ascii_nbr(uint32_t x, uint32_t y, uint32_t value);
 static uint32_t get_ascii_len(uint32_t value);
-static void print_ascii(uint32_t x_start, uint32_t y_start, uint32_t value, uint32_t tile_size, uint32_t ascii_size);
+static void print_ascii(uint32_t x_start, uint32_t y_start, uint32_t value,
+                        uint32_t tile_size, uint32_t ascii_size);
 
 static void print_0_ascii(uint32_t x, uint32_t y);
 static void print_1_ascii(uint32_t x, uint32_t y);
@@ -37,8 +38,7 @@ void print_grid(t_engine *engine) {
   size -= size % engine->grid_size;
   uint32_t x_start = (width - size * 2) / 2;
   uint32_t y_start = (height - size) / 2;
-  if (size / engine->grid_size > 6)
-  {
+  if (size / engine->grid_size > 6) {
     print_template(x_start, y_start, size, engine->grid_size);
     uint32_t tile_size = size / engine->grid_size;
     for (int32_t y = 0; y < engine->grid_size; y++) {
@@ -149,8 +149,8 @@ static uint32_t get_ascii_len(uint32_t value) {
   return size;
 }
 
-static void print_ascii(uint32_t x_start, uint32_t y_start, uint32_t value, uint32_t tile_size, uint32_t ascii_size)
-{
+static void print_ascii(uint32_t x_start, uint32_t y_start, uint32_t value,
+                        uint32_t tile_size, uint32_t ascii_size) {
   uint32_t x = x_start + (tile_size * 2 - ascii_size) / 2 + ascii_size;
   uint32_t y = y_start + (tile_size - 6) / 2 + 1;
   print_ascii_nbr(x, y, value);
