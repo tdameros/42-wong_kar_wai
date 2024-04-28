@@ -6,7 +6,7 @@
 /*   By: bwisniew <bwisniew@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:47:00 by tdameros          #+#    #+#             */
-/*   Updated: 2024/04/28 20:22:59 by bwisniew         ###   ########.fr       */
+/*   Updated: 2024/04/28 21:36:17 by bwisniew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ int main(void) {
   initialize_colors();
   keypad(stdscr, TRUE);
   t_engine engine = initialize_engine("bwisniew", 4);
-
-
   int32_t c = 0;
   print_menu(engine.menu, &engine, engine.selected_button);
   while (c != KEY_ESC) {

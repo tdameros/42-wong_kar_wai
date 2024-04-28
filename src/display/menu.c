@@ -6,7 +6,7 @@
 /*   By: bwisniew <bwisniew@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 13:56:48 by bwisniew          #+#    #+#             */
-/*   Updated: 2024/04/28 21:15:02 by bwisniew         ###   ########.fr       */
+/*   Updated: 2024/04/28 21:48:31 by bwisniew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static void decrement_grid_size(t_engine *engine);
 static void loose_menu_callback(int32_t key);
 static void print_score_ascii(uint32_t x, uint32_t y);
 static void print_score_menu(t_engine *engine, int8_t selected);
+static uint32_t ft_strlen(char *str);
 
 void menu_callback(t_engine *engine, int32_t key) {
   switch (engine->menu) {
@@ -342,10 +343,10 @@ static void print_score_menu(t_engine *engine, int8_t selected) {
   uint32_t height, width, size_x, size_y;
   getmaxyx(stdscr, height, width);
 
-  size_y = (width / 2 > height ? height - MENU_MARGIN * 2
+  size_x = (width / 2 > height ? height - MENU_MARGIN * 2
                                : width / 2 - MENU_MARGIN * 2) *
            2;
-  size_x = size_x / 2 - (size_x / 2 * 0.45f);
+  size_y = size_x / 2 - (size_x / 2 * 0.45f);
   attron(COLOR_PAIR(COLOR_PAIR_MENU));
   uint32_t x_start = (width - size_x) / 2;
   uint32_t y_start = (height - size_y) / 2;
@@ -368,8 +369,15 @@ static void print_score_menu(t_engine *engine, int8_t selected) {
     }
   }
 	
+(void)engine;
+	uint32_t score_size = 4;
+	for (uint32_t i = 0; i < score_size; i++)
+	{
+  		mvprintw(y_start + 10 + 2 * i, x_start + ((size_x - (ft_nbrlen(32131) + ft_strlen("bwisniew") + 3)) / 2),
+		"%s : %d", "bwisniew", 32131);
+		
+	}
 	
-  mvprintw(y_start + size_y - 5, x_start + ((size_x - (ft_nbrlen(engine->score) + 13)) / 2), "Your score : %d", engine->score);
 
   if (size_x > 32) {
     print_score_ascii(x_start + ((size_x - 32) / 2), y_start + 3);
@@ -385,10 +393,18 @@ static void print_score_menu(t_engine *engine, int8_t selected) {
   attroff(COLOR_PAIR(COLOR_PAIR_MENU));
 }
 
+static uint32_t ft_strlen(char *str)
+{
+	uint32_t size = 0;
+	while (str[size])
+		size++;
+	return size;
+}
+
 static void print_score_ascii(uint32_t x, uint32_t y) {
   mvprintw(y + 0, x, "  ____                          ");
   mvprintw(y + 1, x, " / ___|  ___ ___  _ __ ___  ___ ");
   mvprintw(y + 2, x, " \\___ \\ / __/ _ \\| '__/ _ \\/ __|");
-  mvprintw(y + 3, x, "  ___) | (_| (_) | | |  __/\__ \\");
+  mvprintw(y + 3, x, "  ___) | (_| (_) | | |  __/\\__ \\");
   mvprintw(y + 4, x, " |____/ \\___\\___/|_|  \\___||___/");
 }
