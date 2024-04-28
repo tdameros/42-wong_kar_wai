@@ -70,6 +70,7 @@ int main(int argc, char **argv) {
     print_menu(engine.menu, &engine, engine.selected_button);
     refresh();
   }
+  free_scores(&engine.best_scores);
   endwin();
   return 0;
 }
