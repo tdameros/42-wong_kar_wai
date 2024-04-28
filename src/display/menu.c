@@ -25,6 +25,8 @@ static void print_start_menu(t_engine *engine, int8_t selected);
 static void print_loose_menu(t_engine *engine, int8_t selected);
 static void start_menu_callback(t_engine *engine, int32_t key);
 static void print_loose_ascii(uint32_t x, uint32_t y);
+static void increment_grid_size(t_engine *engine);
+static void decrement_grid_size(t_engine *engine);
 
 void menu_callback(t_engine *engine, int32_t key) {
   switch (engine->menu) {
@@ -128,17 +130,33 @@ static void start_menu_callback(t_engine *engine, int32_t key) {
     engine->selected_button = (engine->selected_button - 1) % 4;
   } else if (key == KEY_DOWN) {
     engine->selected_button = (engine->selected_button + 1) % 4;
-  } else if (key == KEY_LEFT && engine->selected_button == BUTTON3) {
-    engine->grid_size =
-        ((engine->grid_size - 1) % MAX_GRID_SIZE) + MIN_GRID_SIZE;
-  } else if (key == KEY_RIGHT && engine->selected_button == BUTTON3) {
-    engine->grid_size =
-        ((engine->grid_size + 1) % MAX_GRID_SIZE) + MIN_GRID_SIZE;
   } else if (key == KEY_RETURN && engine->selected_button == BUTTON1) {
+    engine->menu = NO_MENU;
+  } else if (key == KEY_RETURN && engine->selected_button == BUTTON2) {
+    engine->menu = SCORES_MENU;
+  } else if (key == KEY_LEFT && engine->selected_button == BUTTON3) {
+    decrement_grid_size(engine);
+  } else if (key == KEY_RIGHT && engine->selected_button == BUTTON3) {
+    increment_grid_size(engine);
+  } else if (key == KEY_RETURN && engine->selected_button == BUTTON3) {
     engine->menu = NO_MENU;
   } else if (key == KEY_RETURN && engine->selected_button == BUTTON4) {
     endwin();
     exit(0);
+  }
+}
+
+static void increment_grid_size(t_engine *engine) {
+  engine->grid_size++;
+  if (engine->grid_size > MAX_GRID_SIZE) {
+    engine->grid_size = MIN_GRID_SIZE;
+  }
+}
+
+static void decrement_grid_size(t_engine *engine) {
+  engine->grid_size--;
+  if (engine->grid_size < MIN_GRID_SIZE) {
+    engine->grid_size = MAX_GRID_SIZE;
   }
 }
 
