@@ -17,15 +17,13 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "libft.h"
-
 #include "display.h"
 #include "engine.h"
 #include "grid.h"
+#include "libft.h"
 #include "scores.h"
 
 int main(int argc, char **argv) {
-
   setlocale(LC_ALL, "");
   uint8_t victory = false;
   initscr();
@@ -61,7 +59,8 @@ int main(int argc, char **argv) {
     if (engine.menu == NO_MENU && play_move(&engine, c) &&
         (c == KEY_UP || c == KEY_DOWN || c == KEY_LEFT || c == KEY_RIGHT)) {
       place_random_tile(&engine);
-      if (update_scores(&engine.best_scores, engine.username, engine.score) == -1) {
+      if (update_scores(&engine.best_scores, engine.username, engine.score) ==
+          -1) {
         ft_putstr_fd("Error updating scores\n", STDERR_FILENO);
         return -1;
       }

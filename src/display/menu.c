@@ -10,15 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <ncurses.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-#include <ncurses.h>
-#include "libft.h"
 
 #include "display.h"
 #include "engine.h"
 #include "grid.h"
+#include "libft.h"
 
 static void print_win_ascii(uint32_t x, uint32_t y);
 static void print_win_menu(t_engine *engine, int8_t selected);
