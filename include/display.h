@@ -6,7 +6,7 @@
 /*   By: bwisniew <bwisniew@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 14:30:31 by bwisniew          #+#    #+#             */
-/*   Updated: 2024/04/28 17:23:21 by bwisniew         ###   ########.fr       */
+/*   Updated: 2024/04/28 19:50:18 by bwisniew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ int8_t initialize_colors(void);
 void print_menu(t_menu type, t_engine *engine, int8_t selected);
 uint8_t get_color_id(int32_t tile_value);
 void menu_callback(t_engine *engine, int32_t key);
+uint32_t ft_nbrlen(uint32_t value);
 
 
 #endif
