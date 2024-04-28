@@ -7,10 +7,10 @@
 # include <stdint.h>
 
 typedef enum e_move {
-    RIGHT,
-    LEFT,
-    UP,
-    DOWN,
+    RIGHT = KEY_RIGHT,
+    LEFT = KEY_LEFT,
+    UP = KEY_UP,
+    DOWN = KEY_DOWN,
 }   t_move; 
 
 void set_tile_coord(t_engine *engine , uint32_t x, uint32_t y, uint32_t value);
