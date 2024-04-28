@@ -27,6 +27,7 @@ static void start_menu_callback(t_engine *engine, int32_t key);
 static void print_loose_ascii(uint32_t x, uint32_t y);
 static void increment_grid_size(t_engine *engine);
 static void decrement_grid_size(t_engine *engine);
+static void loose_menu_callback(int32_t key);
 
 void menu_callback(t_engine *engine, int32_t key) {
   switch (engine->menu) {
@@ -35,6 +36,10 @@ void menu_callback(t_engine *engine, int32_t key) {
       break;
     case (START_MENU):
       start_menu_callback(engine, key);
+      break;
+    case (LOOSE_MENU):
+      loose_menu_callback(key);
+      break;
     default:
       break;
   }
@@ -300,7 +305,7 @@ static void print_loose_menu(t_engine *engine, int8_t selected) {
     mvprintw(y_start + 5, x_start + ((size_x - 8) / 2), "You Win!");
   }
 
-  if (selected == BUTTON2)
+  if (selected == BUTTON1)
     mvprintw(y_start + size_y - 3, x_start + ((size_x - 10) / 2), "» Exit «");
   else
     mvprintw(y_start + size_y - 3, x_start + ((size_x - 10) / 2), "  Exit  ");
@@ -308,6 +313,13 @@ static void print_loose_menu(t_engine *engine, int8_t selected) {
   mvprintw(0, 0, "height = %d, width = %d, size_x = %d, size_y = %d",
            x_start + ((size_x - 8) / 2), y_start + 5, size_x, size_y);
   attroff(COLOR_PAIR(COLOR_PAIR_MENU));
+}
+
+static void loose_menu_callback(int32_t key) {
+  if (key == KEY_RETURN) {
+    endwin();
+    exit(0);
+  }
 }
 
 static void print_loose_ascii(uint32_t x, uint32_t y) {
