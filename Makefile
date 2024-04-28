@@ -26,7 +26,7 @@ MAKELIBFT		=	$(MAKE) -C $(DIR_LIBFT)
 
 # ------------ COMPILATION ------------ #
 
-CFLAGS			=	-Wall -Wextra -Werror
+CFLAGS			=	-Wall -Wextra -Werror -O3
 DEBUG_CFLAGS	=	-Wall -Wextra -Werror -fsanitize=address -g3
 
 DEP_FLAGS		=	-MMD -MP
