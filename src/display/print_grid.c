@@ -40,16 +40,6 @@ void print_grid(t_engine *engine) {
   uint32_t x_start = (width - size * 2) / 2;
   uint32_t y_start = (height - size) / 2;
 
-
-uint32_t ft_nbrlen(uint32_t value)
-{
-  uint32_t value_size = 0;
-  while (value > 9) {
-      value /= 10;
-      value_size++;
-  }
-  return (value_size);
-
   if (size / engine->grid_size > 6) {
     print_template(x_start, y_start, size, engine->grid_size);
     uint32_t tile_size = size / engine->grid_size;
@@ -71,6 +61,16 @@ uint32_t ft_nbrlen(uint32_t value)
       }
     }
   }
+}
+
+uint32_t ft_nbrlen(uint32_t value)
+{
+  uint32_t value_size = 0;
+  while (value > 9) {
+      value /= 10;
+      value_size++;
+  }
+  return (value_size);
 }
 
 static void print_template(uint32_t x_start, uint32_t y_start, uint32_t size,
