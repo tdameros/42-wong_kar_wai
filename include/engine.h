@@ -6,7 +6,7 @@
 /*   By: bwisniew <bwisniew@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:51:00 by tdameros          #+#    #+#             */
-/*   Updated: 2024/04/28 21:02:46 by bwisniew         ###   ########.fr       */
+/*   Updated: 2024/04/28 23:39:16 by bwisniew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include "display.h"
 # include "scores.h"
 
-# define MAX_GRID_SIZE 10
-# define MIN_GRID_SIZE 2
+# define MAX_GRID_SIZE 6
+# define MIN_GRID_SIZE 4
 # define GRID_BUFFER_SIZE (MAX_GRID_SIZE * MAX_GRID_SIZE)
 # define USERNAME_MAX_LENGTH 8
 # define USERNAME_BUFFER_SIZE (USERNAME_MAX_LENGTH + 1)

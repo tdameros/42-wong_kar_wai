@@ -6,7 +6,7 @@
 /*   By: bwisniew <bwisniew@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 13:56:48 by bwisniew          #+#    #+#             */
-/*   Updated: 2024/04/28 23:01:23 by bwisniew         ###   ########.fr       */
+/*   Updated: 2024/04/28 23:36:41 by bwisniew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,6 +293,7 @@ static void print_start_ascii(uint32_t x, uint32_t y) {
 }
 
 static void print_loose_menu(t_engine *engine, int8_t selected) {
+  (void) selected;
   print_grid(engine);
   uint32_t height, width, size_x, size_y;
   getmaxyx(stdscr, height, width);
@@ -333,10 +334,9 @@ static void print_loose_menu(t_engine *engine, int8_t selected) {
     mvprintw(y_start + 5, x_start + ((size_x - 8) / 2), "You Win!");
   }
 
-  if (selected == BUTTON1)
-    mvprintw(y_start + size_y - 3, x_start + ((size_x - 10) / 2), "» Exit «");
-  else
-    mvprintw(y_start + size_y - 3, x_start + ((size_x - 10) / 2), "  Exit  ");
+
+	mvprintw(y_start + size_y - 3, x_start + ((size_x - 10) / 2), "» Exit «");
+
 
   attroff(COLOR_PAIR(COLOR_PAIR_MENU));
 }
