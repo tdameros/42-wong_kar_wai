@@ -1,5 +1,7 @@
-# Bin
+# Project
 2048
+.scores
+libft.a
 
 # IDE
 .vscode

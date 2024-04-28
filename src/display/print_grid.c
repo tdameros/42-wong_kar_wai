@@ -32,8 +32,10 @@ void print_grid(t_engine *engine) {
 
   clear();
   getmaxyx(stdscr, height, width);
-  mvprintw(1, width - ft_nbrlen(engine->best_score) - 14 - 2, "Best score : %d", engine->best_score);
-  mvprintw(2, width - ft_nbrlen(engine->score) - 9 - 2, "Score : %d", engine->score);
+  mvprintw(1, width - ft_nbrlen(engine->best_scores.players[0].score) - 14 - 2,
+           "Best score : %d", engine->best_scores.players[0].score);
+  mvprintw(2, width - ft_nbrlen(engine->score) - 9 - 2, "Score : %d",
+           engine->score);
   size = width / 2 > height ? height - GRID_MARGIN * 2
                             : width / 2 - GRID_MARGIN * 2;
   size -= size % engine->grid_size;
@@ -63,12 +65,11 @@ void print_grid(t_engine *engine) {
   }
 }
 
-uint32_t ft_nbrlen(uint32_t value)
-{
+uint32_t ft_nbrlen(uint32_t value) {
   uint32_t value_size = 0;
   while (value > 9) {
-      value /= 10;
-      value_size++;
+    value /= 10;
+    value_size++;
   }
   return (value_size);
 }
@@ -83,7 +84,7 @@ static void print_template(uint32_t x_start, uint32_t y_start, uint32_t size,
   }
   for (uint32_t y = y_start; y < size + y_start + 1; y += size / grid_size) {
     for (uint32_t x = x_start; x < size * 2 + x_start + 1; x++) {
-        mvprintw(y, x, " ");
+      mvprintw(y, x, " ");
     }
   }
 }

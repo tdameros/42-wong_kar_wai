@@ -12,10 +12,12 @@
 
 #include <ncurses.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "display.h"
 #include "engine.h"
 #include "grid.h"
+#include "libft.h"
 
 static void print_win_ascii(uint32_t x, uint32_t y);
 static void print_win_menu(t_engine *engine, int8_t selected);
@@ -27,10 +29,10 @@ static void start_menu_callback(t_engine *engine, int32_t key);
 static void print_loose_ascii(uint32_t x, uint32_t y);
 static void increment_grid_size(t_engine *engine);
 static void decrement_grid_size(t_engine *engine);
-static void loose_menu_callback(int32_t key);
+static void loose_menu_callback(t_engine *engine, int32_t key);
 static void print_score_ascii(uint32_t x, uint32_t y);
 static void print_score_menu(t_engine *engine, int8_t selected);
-static uint32_t ft_strlen(char *str);
+static void score_menu_callback(t_engine *engine, int32_t key);
 
 void menu_callback(t_engine *engine, int32_t key) {
   switch (engine->menu) {
@@ -41,7 +43,10 @@ void menu_callback(t_engine *engine, int32_t key) {
       start_menu_callback(engine, key);
       break;
     case (LOOSE_MENU):
-      loose_menu_callback(key);
+      loose_menu_callback(engine, key);
+      break;
+    case (SCORES_MENU):
+      score_menu_callback(engine, key);
       break;
     default:
       break;
@@ -62,7 +67,7 @@ void print_menu(t_menu type, t_engine *engine, int8_t selected) {
     case START_MENU:
       print_start_menu(engine, selected);
       break;
-	case SCORES_MENU:
+    case SCORES_MENU:
       print_score_menu(engine, selected);
       break;
     default:
@@ -130,6 +135,7 @@ static void win_menu_callback(t_engine *engine, int32_t key) {
     engine->menu = NO_MENU;
   } else if (key == KEY_RETURN && engine->selected_button == BUTTON2) {
     endwin();
+    free_scores(&engine->best_scores);
     exit(0);
   }
 }
@@ -141,20 +147,33 @@ static void start_menu_callback(t_engine *engine, int32_t key) {
     engine->selected_button = (engine->selected_button + 1) % 4;
   } else if (key == KEY_RETURN && engine->selected_button == BUTTON1) {
     engine->menu = NO_MENU;
-	place_random_tile(engine);
-  	place_random_tile(engine);
+    if (!engine->started) {
+      place_random_tile(engine);
+      place_random_tile(engine);
+      engine->started = true;
+    }
   } else if (key == KEY_RETURN && engine->selected_button == BUTTON2) {
     engine->menu = SCORES_MENU;
+    free_scores(&engine->best_scores);
+    if (read_scores(&engine->best_scores) == -1) {
+      endwin();
+      ft_putstr_fd("Error reading scores\n", STDERR_FILENO);
+      exit(1);
+    }
   } else if (key == KEY_LEFT && engine->selected_button == BUTTON3) {
     decrement_grid_size(engine);
   } else if (key == KEY_RIGHT && engine->selected_button == BUTTON3) {
     increment_grid_size(engine);
   } else if (key == KEY_RETURN && engine->selected_button == BUTTON3) {
     engine->menu = NO_MENU;
-	place_random_tile(engine);
-  	place_random_tile(engine);
+    if (!engine->started) {
+      place_random_tile(engine);
+      place_random_tile(engine);
+      engine->started = true;
+    }
   } else if (key == KEY_RETURN && engine->selected_button == BUTTON4) {
     endwin();
+    free_scores(&engine->best_scores);
     exit(0);
   }
 }
@@ -304,7 +323,9 @@ static void print_loose_menu(t_engine *engine, int8_t selected) {
     }
   }
 
-  mvprintw(y_start + size_y - 5, x_start + ((size_x - (ft_nbrlen(engine->score) + 13)) / 2), "Your score : %d", engine->score);
+  mvprintw(y_start + size_y - 5,
+           x_start + ((size_x - (ft_nbrlen(engine->score) + 13)) / 2),
+           "Your score : %d", engine->score);
 
   if (size_x > 55) {
     print_loose_ascii(x_start + ((size_x - 55) / 2), y_start + 3);
@@ -320,9 +341,10 @@ static void print_loose_menu(t_engine *engine, int8_t selected) {
   attroff(COLOR_PAIR(COLOR_PAIR_MENU));
 }
 
-static void loose_menu_callback(int32_t key) {
+static void loose_menu_callback(t_engine *engine, int32_t key) {
   if (key == KEY_RETURN) {
     endwin();
+    free_scores(&engine->best_scores);
     exit(0);
   }
 }
@@ -340,6 +362,8 @@ static void print_loose_ascii(uint32_t x, uint32_t y) {
 }
 
 static void print_score_menu(t_engine *engine, int8_t selected) {
+  (void)selected;
+  clear();
   uint32_t height, width, size_x, size_y;
   getmaxyx(stdscr, height, width);
 
@@ -368,15 +392,16 @@ static void print_score_menu(t_engine *engine, int8_t selected) {
         mvprintw(y, x, " ");
     }
   }
-	
-	(void) engine;
-	for (uint32_t i = 0; i < engine->scores.nb_players; i++)
-	{
-  		mvprintw(y_start + 10 + 2 * i, x_start + ((size_x - (ft_nbrlen(engine->scores.players[i].score) + ft_strlen(engine->scores.players[i].username) + 3)) / 2),
-		"%s : %d", engine->scores.players[i].username, engine->scores.players[i].score);
-		
-	}
-	
+  for (uint32_t i = 0; i < engine->best_scores.nb_players; i++) {
+    mvprintw(
+        y_start + 10 + 2 * i,
+        x_start + ((size_x -
+                    (ft_nbrlen(engine->best_scores.players[i].score) +
+                     ft_strlen(engine->best_scores.players[i].username) + 3)) /
+                   2),
+        "%s : %d", engine->best_scores.players[i].username,
+        engine->best_scores.players[i].score);
+  }
 
   if (size_x > 32) {
     print_score_ascii(x_start + ((size_x - 32) / 2), y_start + 3);
@@ -384,20 +409,8 @@ static void print_score_menu(t_engine *engine, int8_t selected) {
     mvprintw(y_start + 5, x_start + ((size_x - 6) / 2), "Score");
   }
 
-  if (selected == BUTTON1)
-    mvprintw(y_start + size_y - 3, x_start + ((size_x - 10) / 2), "» Exit «");
-  else
-    mvprintw(y_start + size_y - 3, x_start + ((size_x - 10) / 2), "  Exit  ");
-
+  mvprintw(y_start + size_y - 3, x_start + ((size_x - 10) / 2), "» Exit «");
   attroff(COLOR_PAIR(COLOR_PAIR_MENU));
-}
-
-static uint32_t ft_strlen(char *str)
-{
-	uint32_t size = 0;
-	while (str[size])
-		size++;
-	return size;
 }
 
 static void print_score_ascii(uint32_t x, uint32_t y) {
@@ -406,4 +419,10 @@ static void print_score_ascii(uint32_t x, uint32_t y) {
   mvprintw(y + 2, x, " \\___ \\ / __/ _ \\| '__/ _ \\/ __|");
   mvprintw(y + 3, x, "  ___) | (_| (_) | | |  __/\\__ \\");
   mvprintw(y + 4, x, " |____/ \\___\\___/|_|  \\___||___/");
+}
+
+static void score_menu_callback(t_engine *engine, int32_t key) {
+  if (key == KEY_RETURN) {
+    engine->menu = START_MENU;
+  }
 }
