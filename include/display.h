@@ -99,6 +99,7 @@ typedef enum e_menu {
 	NO_MENU,
 	WIN_MENU,
 	LOOSE_MENU,
+        SCORES_MENU,
 }	t_menu;
 
 typedef enum e_button {
