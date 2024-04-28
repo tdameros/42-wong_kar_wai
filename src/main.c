@@ -6,7 +6,7 @@
 /*   By: bwisniew <bwisniew@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:47:00 by tdameros          #+#    #+#             */
-/*   Updated: 2024/04/28 21:36:17 by bwisniew         ###   ########.fr       */
+/*   Updated: 2024/04/28 22:03:26 by bwisniew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,20 @@
 #include "grid.h"
 
 int main(void) {
-  setlocale(LC_ALL, "");
-  initscr();
-  assume_default_colors(COLOR_BLACK, COLOR_ID_BG);
-  curs_set(0);
 
-  initialize_colors();
-  keypad(stdscr, TRUE);
+  if (!setlocale(LC_ALL, ""))
+    return (1);
+  initscr();
+  if (
+    assume_default_colors(COLOR_BLACK, COLOR_ID_BG) == ERR ||
+    curs_set(0) == ERR ||
+    initialize_colors() < 0 ||
+    keypad(stdscr, TRUE) == ERR
+  )
+  {
+    endwin();
+    return (1);
+  }
   t_engine engine = initialize_engine("bwisniew", 4);
   int32_t c = 0;
   print_menu(engine.menu, &engine, engine.selected_button);
