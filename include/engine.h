@@ -24,7 +24,7 @@
 # define SCORES_FILE ".scores"
 # define USERNAME_MAX_LENGTH 8
 # define USERNAME_BUFFER_SIZE (USERNAME_MAX_LENGTH + 1)
-#define NEW_TILE 2
+#define NEW_TILE 32
 enum e_const
 {
 	WIN_VALUE = 2048

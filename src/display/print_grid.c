@@ -63,7 +63,7 @@ uint32_t ft_nbrlen(uint32_t value)
         uint32_t ascii_size = get_ascii_len(value);
         uint32_t tile_x = x_start + x * (size * 2 / engine->grid_size);
         uint32_t tile_y = y_start + y * size / engine->grid_size;
-        if (value == 0 || ascii_size > tile_size * 2 + 4 || tile_size < 10)
+        if (value == 0 || tile_size * 2 < ascii_size + 2 || tile_size < 8)
           print_number(tile_x, tile_y, tile_size, value);
         else
           print_ascii(tile_x, tile_y, value, tile_size, ascii_size);
