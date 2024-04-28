@@ -11,6 +11,7 @@ static void print_number(uint32_t x, uint32_t y, uint32_t tile_size,
 static void fill_tile(uint32_t start_x, uint32_t start_y, uint32_t tile_size);
 static void print_ascii_nbr(uint32_t x, uint32_t y, uint32_t value);
 static uint32_t get_ascii_len(uint32_t value);
+static void print_ascii(uint32_t x_start, uint32_t y_start, uint32_t value, uint32_t tile_size, uint32_t ascii_size);
 
 static void print_0_ascii(uint32_t x, uint32_t y);
 static void print_1_ascii(uint32_t x, uint32_t y);
@@ -26,7 +27,7 @@ static void print_9_ascii(uint32_t x, uint32_t y);
 void print_grid(t_engine *engine) {
   uint32_t width;
   uint32_t height;
-  uint32_t size;
+  int32_t size;
 
   clear();
   getmaxyx(stdscr, height, width);
@@ -36,30 +37,28 @@ void print_grid(t_engine *engine) {
   size -= size % engine->grid_size;
   uint32_t x_start = (width - size * 2) / 2;
   uint32_t y_start = (height - size) / 2;
-  if (size > 10) print_template(x_start, y_start, size, engine->grid_size);
-
-  move(0, 0);
-  printw("width = %d, height = %d, size = %d\n", width, height, size);
-  for (int32_t y = 0; y < engine->grid_size; y++) {
-    for (int32_t x = 0; x < engine->grid_size; x++) {
-      uint32_t value = get_tile_coord(engine, x, y);
-      attron(COLOR_PAIR(get_color_id(value)));
-      fill_tile((x_start + x * (size * 2 / engine->grid_size)),
-                (y_start + y * size / engine->grid_size),
-                size / engine->grid_size);
-      dprintf(2, "size ascii of %d = %d\n", value, get_ascii_len(value));
-      if (value == 0 || get_ascii_len(value) > size * 2 / engine->grid_size ||
-          get_ascii_len(value) > 6)
-        print_number((x_start + x * (size * 2 / engine->grid_size)),
-                     (y_start + y * size / engine->grid_size),
-                     size / engine->grid_size, value);
-      else
-        print_ascii_nbr((x_start + x * (size * 2 / engine->grid_size)),
-                        (y_start + y * size / engine->grid_size), value);
-      attroff(COLOR_PAIR(get_color_id(value)));
+  if (size / engine->grid_size > 6)
+  {
+    print_template(x_start, y_start, size, engine->grid_size);
+    uint32_t tile_size = size / engine->grid_size;
+    for (int32_t y = 0; y < engine->grid_size; y++) {
+      for (int32_t x = 0; x < engine->grid_size; x++) {
+        uint32_t value = get_tile_coord(engine, x, y);
+        attron(COLOR_PAIR(get_color_id(value)));
+        fill_tile((x_start + x * (size * 2 / engine->grid_size)),
+                  (y_start + y * size / engine->grid_size),
+                  size / engine->grid_size);
+        uint32_t ascii_size = get_ascii_len(value);
+        uint32_t tile_x = x_start + x * (size * 2 / engine->grid_size);
+        uint32_t tile_y = y_start + y * size / engine->grid_size;
+        if (value == 0 || ascii_size > tile_size * 2 + 4 || tile_size < 10)
+          print_number(tile_x, tile_y, tile_size, value);
+        else
+          print_ascii(tile_x, tile_y, value, tile_size, ascii_size);
+        attroff(COLOR_PAIR(get_color_id(value)));
+      }
     }
   }
-  refresh();
 }
 
 static void print_template(uint32_t x_start, uint32_t y_start, uint32_t size,
@@ -123,7 +122,7 @@ static void fill_tile(uint32_t start_x, uint32_t start_y, uint32_t tile_size) {
 
 static uint32_t get_ascii_len(uint32_t value) {
   uint32_t size = 0;
-  while (value > 9) {
+  while (value > 0) {
     uint32_t digit = value % 10;
     if (digit == 0)
       size += ASCII_0;
@@ -150,32 +149,37 @@ static uint32_t get_ascii_len(uint32_t value) {
   return size;
 }
 
+static void print_ascii(uint32_t x_start, uint32_t y_start, uint32_t value, uint32_t tile_size, uint32_t ascii_size)
+{
+  uint32_t x = x_start + (tile_size * 2 - ascii_size) / 2 + ascii_size;
+  uint32_t y = y_start + (tile_size - 6) / 2 + 1;
+  print_ascii_nbr(x, y, value);
+}
+
 static void print_ascii_nbr(uint32_t x, uint32_t y, uint32_t value) {
-  uint32_t digit;
+  uint32_t digit = value % 10;
   if (value > 9) {
-    digit = value % 10;
     if (digit == 0)
-      print_ascii_nbr(x += ASCII_0, y, value / 10);
+      print_ascii_nbr(x - ASCII_0, y, value / 10);
     else if (digit == 1)
-      print_ascii_nbr(x += ASCII_1, y, value / 10);
+      print_ascii_nbr(x - ASCII_1, y, value / 10);
     else if (digit == 2)
-      print_ascii_nbr(x += ASCII_2, y, value / 10);
+      print_ascii_nbr(x - ASCII_2, y, value / 10);
     else if (digit == 3)
-      print_ascii_nbr(x += ASCII_3, y, value / 10);
+      print_ascii_nbr(x - ASCII_3, y, value / 10);
     else if (digit == 4)
-      print_ascii_nbr(x += ASCII_4, y, value / 10);
+      print_ascii_nbr(x - ASCII_4, y, value / 10);
     else if (digit == 5)
-      print_ascii_nbr(x += ASCII_5, y, value / 10);
+      print_ascii_nbr(x - ASCII_5, y, value / 10);
     else if (digit == 6)
-      print_ascii_nbr(x += ASCII_6, y, value / 10);
+      print_ascii_nbr(x - ASCII_6, y, value / 10);
     else if (digit == 7)
-      print_ascii_nbr(x += ASCII_7, y, value / 10);
+      print_ascii_nbr(x - ASCII_7, y, value / 10);
     else if (digit == 8)
-      print_ascii_nbr(x += ASCII_8, y, value / 10);
+      print_ascii_nbr(x - ASCII_8, y, value / 10);
     else if (digit == 9)
-      print_ascii_nbr(x += ASCII_9, y, value / 10);
+      print_ascii_nbr(x - ASCII_9, y, value / 10);
   }
-  digit = value % 10;
   if (digit == 0)
     print_0_ascii(x, y);
   else if (digit == 1)
@@ -199,91 +203,91 @@ static void print_ascii_nbr(uint32_t x, uint32_t y, uint32_t value) {
 }
 
 static void print_0_ascii(uint32_t x, uint32_t y) {
-  mvprintw(y + 0, x, " ██████╗ ");
-  mvprintw(y + 1, x, "██╔═████╗");
-  mvprintw(y + 2, x, "██║██╔██║");
-  mvprintw(y + 3, x, "████╔╝██║");
-  mvprintw(y + 4, x, "╚██████╔╝");
-  mvprintw(y + 5, x, " ╚═════╝ ");
+  mvprintw(y + 0, x - ASCII_0, " ██████╗ ");
+  mvprintw(y + 1, x - ASCII_0, "██╔═████╗");
+  mvprintw(y + 2, x - ASCII_0, "██║██╔██║");
+  mvprintw(y + 3, x - ASCII_0, "████╔╝██║");
+  mvprintw(y + 4, x - ASCII_0, "╚██████╔╝");
+  mvprintw(y + 5, x - ASCII_0, " ╚═════╝ ");
 }
 
 static void print_1_ascii(uint32_t x, uint32_t y) {
-  mvprintw(y + 0, x, " ██╗");
-  mvprintw(y + 1, x, "███║");
-  mvprintw(y + 2, x, "╚██║");
-  mvprintw(y + 3, x, " ██║");
-  mvprintw(y + 4, x, " ██║");
-  mvprintw(y + 5, x, " ╚═╝");
+  mvprintw(y + 0, x - ASCII_1, " ██╗");
+  mvprintw(y + 1, x - ASCII_1, "███║");
+  mvprintw(y + 2, x - ASCII_1, "╚██║");
+  mvprintw(y + 3, x - ASCII_1, " ██║");
+  mvprintw(y + 4, x - ASCII_1, " ██║");
+  mvprintw(y + 5, x - ASCII_1, " ╚═╝");
 }
 
 static void print_2_ascii(uint32_t x, uint32_t y) {
-  mvprintw(y + 0, x, "██████╗ ");
-  mvprintw(y + 1, x, "╚════██╗");
-  mvprintw(y + 2, x, " █████╔╝");
-  mvprintw(y + 3, x, "██╔═══╝ ");
-  mvprintw(y + 4, x, "███████╗");
-  mvprintw(y + 5, x, "╚══════╝");
+  mvprintw(y + 0, x - ASCII_2, "██████╗ ");
+  mvprintw(y + 1, x - ASCII_2, "╚════██╗");
+  mvprintw(y + 2, x - ASCII_2, " █████╔╝");
+  mvprintw(y + 3, x - ASCII_2, "██╔═══╝ ");
+  mvprintw(y + 4, x - ASCII_2, "███████╗");
+  mvprintw(y + 5, x - ASCII_2, "╚══════╝");
 }
 
 static void print_3_ascii(uint32_t x, uint32_t y) {
-  mvprintw(y + 0, x, "██████╗ ");
-  mvprintw(y + 1, x, "╚════██╗");
-  mvprintw(y + 2, x, " █████╔╝");
-  mvprintw(y + 3, x, " ╚═══██╗");
-  mvprintw(y + 4, x, "██████╔╝");
-  mvprintw(y + 5, x, "╚═════╝ ");
+  mvprintw(y + 0, x - ASCII_3, "██████╗ ");
+  mvprintw(y + 1, x - ASCII_3, "╚════██╗");
+  mvprintw(y + 2, x - ASCII_3, " █████╔╝");
+  mvprintw(y + 3, x - ASCII_3, " ╚═══██╗");
+  mvprintw(y + 4, x - ASCII_3, "██████╔╝");
+  mvprintw(y + 5, x - ASCII_3, "╚═════╝ ");
 }
 
 static void print_4_ascii(uint32_t x, uint32_t y) {
-  mvprintw(y + 0, x, "██╗  ██╗");
-  mvprintw(y + 1, x, "██║  ██║");
-  mvprintw(y + 2, x, "███████║");
-  mvprintw(y + 3, x, "╚════██║");
-  mvprintw(y + 4, x, "     ██║");
-  mvprintw(y + 5, x, "     ╚═╝");
+  mvprintw(y + 0, x - ASCII_4, "██╗  ██╗");
+  mvprintw(y + 1, x - ASCII_4, "██║  ██║");
+  mvprintw(y + 2, x - ASCII_4, "███████║");
+  mvprintw(y + 3, x - ASCII_4, "╚════██║");
+  mvprintw(y + 4, x - ASCII_4, "     ██║");
+  mvprintw(y + 5, x - ASCII_4, "     ╚═╝");
 }
 
 static void print_5_ascii(uint32_t x, uint32_t y) {
-  mvprintw(y + 0, x, "███████╗");
-  mvprintw(y + 1, x, "██╔════╝");
-  mvprintw(y + 2, x, "███████╗");
-  mvprintw(y + 3, x, "╚════██║");
-  mvprintw(y + 4, x, "███████║");
-  mvprintw(y + 5, x, "╚══════╝");
+  mvprintw(y + 0, x - ASCII_5, "███████╗");
+  mvprintw(y + 1, x - ASCII_5, "██╔════╝");
+  mvprintw(y + 2, x - ASCII_5, "███████╗");
+  mvprintw(y + 3, x - ASCII_5, "╚════██║");
+  mvprintw(y + 4, x - ASCII_5, "███████║");
+  mvprintw(y + 5, x - ASCII_5, "╚══════╝");
 }
 
 static void print_6_ascii(uint32_t x, uint32_t y) {
-  mvprintw(y + 0, x, " ██████╗ ");
-  mvprintw(y + 1, x, "██╔════╝ ");
-  mvprintw(y + 2, x, "███████╗ ");
-  mvprintw(y + 3, x, "██╔═══██╗");
-  mvprintw(y + 4, x, "╚██████╔╝");
-  mvprintw(y + 5, x, " ╚═════╝ ");
+  mvprintw(y + 0, x - ASCII_6, " ██████╗ ");
+  mvprintw(y + 1, x - ASCII_6, "██╔════╝ ");
+  mvprintw(y + 2, x - ASCII_6, "███████╗ ");
+  mvprintw(y + 3, x - ASCII_6, "██╔═══██╗");
+  mvprintw(y + 4, x - ASCII_6, "╚██████╔╝");
+  mvprintw(y + 5, x - ASCII_6, " ╚═════╝ ");
 }
 
 static void print_7_ascii(uint32_t x, uint32_t y) {
-  mvprintw(y + 0, x, "███████╗");
-  mvprintw(y + 1, x, "╚════██║");
-  mvprintw(y + 2, x, "    ██╔╝");
-  mvprintw(y + 3, x, "   ██╔╝ ");
-  mvprintw(y + 4, x, "   ██║  ");
-  mvprintw(y + 5, x, "   ╚═╝  ");
+  mvprintw(y + 0, x - ASCII_7, "███████╗");
+  mvprintw(y + 1, x - ASCII_7, "╚════██║");
+  mvprintw(y + 2, x - ASCII_7, "    ██╔╝");
+  mvprintw(y + 3, x - ASCII_7, "   ██╔╝ ");
+  mvprintw(y + 4, x - ASCII_7, "   ██║  ");
+  mvprintw(y + 5, x - ASCII_7, "   ╚═╝  ");
 }
 
 static void print_8_ascii(uint32_t x, uint32_t y) {
-  mvprintw(y + 0, x, " █████╗ ");
-  mvprintw(y + 1, x, "██╔══██╗");
-  mvprintw(y + 2, x, "╚█████╔╝");
-  mvprintw(y + 3, x, "██╔══██╗");
-  mvprintw(y + 4, x, "╚█████╔╝");
-  mvprintw(y + 5, x, " ╚════╝ ");
+  mvprintw(y + 0, x - ASCII_8, " █████╗ ");
+  mvprintw(y + 1, x - ASCII_8, "██╔══██╗");
+  mvprintw(y + 2, x - ASCII_8, "╚█████╔╝");
+  mvprintw(y + 3, x - ASCII_8, "██╔══██╗");
+  mvprintw(y + 4, x - ASCII_8, "╚█████╔╝");
+  mvprintw(y + 5, x - ASCII_8, " ╚════╝ ");
 }
 
 static void print_9_ascii(uint32_t x, uint32_t y) {
-  mvprintw(y + 0, x, " █████╗ ");
-  mvprintw(y + 1, x, "██╔══██╗");
-  mvprintw(y + 2, x, "╚██████║");
-  mvprintw(y + 3, x, " ╚═══██║");
-  mvprintw(y + 4, x, " █████╔╝");
-  mvprintw(y + 5, x, " ╚════╝ ");
+  mvprintw(y + 0, x - ASCII_9, " █████╗ ");
+  mvprintw(y + 1, x - ASCII_9, "██╔══██╗");
+  mvprintw(y + 2, x - ASCII_9, "╚██████║");
+  mvprintw(y + 3, x - ASCII_9, " ╚═══██║");
+  mvprintw(y + 4, x - ASCII_9, " █████╔╝");
+  mvprintw(y + 5, x - ASCII_9, " ╚════╝ ");
 }

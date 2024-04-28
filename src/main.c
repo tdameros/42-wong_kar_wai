@@ -6,7 +6,7 @@
 /*   By: bwisniew <bwisniew@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:47:00 by tdameros          #+#    #+#             */
-/*   Updated: 2024/04/28 17:49:06 by bwisniew         ###   ########.fr       */
+/*   Updated: 2024/04/28 19:23:47 by bwisniew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int main(void) {
 
   int32_t c = 0;
   print_menu(engine.menu, &engine, engine.selected_button);
-  // print_grid(&engine);
+  refresh();
   while (c != KEY_ESC) {
     c = getch();
     if (engine.menu == NO_MENU && play_move(&engine, c) &&
@@ -59,6 +59,7 @@ int main(void) {
       engine.win = true;
     }
     print_menu(engine.menu, &engine, engine.selected_button);
+    refresh();
   }
   endwin();
   printf("Victory = %d\n", victory);
