@@ -32,12 +32,24 @@ void print_grid(t_engine *engine) {
 
   clear();
   getmaxyx(stdscr, height, width);
-
+  mvprintw(1, width - ft_nbrlen(engine->best_score) - 14 - 2, "Best score : %d", engine->best_score);
+  mvprintw(2, width - ft_nbrlen(engine->score) - 9 - 2, "Score : %d", engine->score);
   size = width / 2 > height ? height - GRID_MARGIN * 2
                             : width / 2 - GRID_MARGIN * 2;
   size -= size % engine->grid_size;
   uint32_t x_start = (width - size * 2) / 2;
   uint32_t y_start = (height - size) / 2;
+
+
+uint32_t ft_nbrlen(uint32_t value)
+{
+  uint32_t value_size = 0;
+  while (value > 9) {
+      value /= 10;
+      value_size++;
+  }
+  return (value_size);
+
   if (size / engine->grid_size > 6) {
     print_template(x_start, y_start, size, engine->grid_size);
     uint32_t tile_size = size / engine->grid_size;
@@ -66,33 +78,12 @@ static void print_template(uint32_t x_start, uint32_t y_start, uint32_t size,
   for (uint32_t x = x_start; x < size * 2 + x_start + 1;
        x += (size * 2) / grid_size) {
     for (uint32_t y = y_start; y < size + y_start + 1; y++) {
-      mvprintw(y, x, "│");
+      mvprintw(y, x, " ");
     }
   }
   for (uint32_t y = y_start; y < size + y_start + 1; y += size / grid_size) {
     for (uint32_t x = x_start; x < size * 2 + x_start + 1; x++) {
-      if (y == y_start && x == x_start)
-        mvprintw(y, x, "┌");
-      else if (y == y_start && x == size * 2 + x_start)
-        mvprintw(y, x, "┐");
-      else if (y == size + y_start && x == x_start)
-        mvprintw(y, x, "└");
-      else if (y == size + y_start && x == size * 2 + x_start)
-        mvprintw(y, x, "┘");
-      else if (x == x_start)
-        mvprintw(y, x, "├");
-      else if (x == size * 2 + x_start)
-        mvprintw(y, x, "┤");
-      else if (y == y_start &&
-               x % (size * 2 / grid_size) == x_start % (size * 2 / grid_size))
-        mvprintw(y, x, "┬");
-      else if (y == size + y_start &&
-               x % (size * 2 / grid_size) == x_start % (size * 2 / grid_size))
-        mvprintw(y, x, "┴");
-      else if (x % (size * 2 / grid_size) == x_start % (size * 2 / grid_size))
-        mvprintw(y, x, "┼");
-      else
-        mvprintw(y, x, "─");
+        mvprintw(y, x, " ");
     }
   }
 }

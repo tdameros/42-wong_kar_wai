@@ -6,7 +6,7 @@
 /*   By: bwisniew <bwisniew@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:51:00 by tdameros          #+#    #+#             */
-/*   Updated: 2024/04/28 21:17:56 by bwisniew         ###   ########.fr       */
+/*   Updated: 2024/04/28 21:02:46 by bwisniew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include "display.h"
 
 # define MAX_GRID_SIZE 10
-# define MIN_GRID_SIZE 4
+# define MIN_GRID_SIZE 2
 # define GRID_BUFFER_SIZE (MAX_GRID_SIZE * MAX_GRID_SIZE)
 # define SCORES_FILE ".scores"
 # define USERNAME_MAX_LENGTH 8
@@ -27,13 +27,20 @@
 #define NEW_TILE 32
 enum e_const
 {
-	WIN_VALUE = 8
+	WIN_VALUE = 2048
 };
+
+typedef struct s_player
+{
+	char username[USERNAME_BUFFER_SIZE];
+	uint32_t score;
+} t_player;
 
 typedef struct s_engine
 {
 	uint32_t score;
 	uint32_t best_score;
+	t_player scores[6];
 	char username[USERNAME_BUFFER_SIZE];
 	uint32_t moves;
 	int32_t grid_size;
