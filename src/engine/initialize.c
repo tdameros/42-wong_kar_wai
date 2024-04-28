@@ -1,7 +1,7 @@
+#include <ncurses.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <time.h>
-#include <ncurses.h>
 
 #include "engine.h"
 
@@ -20,7 +20,7 @@ t_engine initialize_engine(char *username, uint32_t grid_size) {
   initialize_username(&engine, username);
   srand(time(NULL));
   start_color();
-    
+
   return engine;
 }
 
@@ -34,4 +34,3 @@ static void initialize_username(t_engine *engine, char *username) {
     engine->username[i] = username[i];
   }
 }
-
