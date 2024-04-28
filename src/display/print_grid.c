@@ -123,7 +123,7 @@ static void fill_tile(uint32_t start_x, uint32_t start_y, uint32_t tile_size) {
 
 static uint32_t get_ascii_len(uint32_t value) {
   uint32_t size = 0;
-  while (value >= 0) {
+  while (value > 9) {
     uint32_t digit = value % 10;
     if (digit == 0)
       size += ASCII_0;
