@@ -10,8 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ncurses.h>
 #include <stdlib.h>
+#include <unistd.h>
+
+#include <ncurses.h>
+#include "libft.h"
 
 #include "display.h"
 #include "engine.h"
@@ -27,7 +30,7 @@ static void start_menu_callback(t_engine *engine, int32_t key);
 static void print_loose_ascii(uint32_t x, uint32_t y);
 static void increment_grid_size(t_engine *engine);
 static void decrement_grid_size(t_engine *engine);
-static void loose_menu_callback(int32_t key);
+static void loose_menu_callback(t_engine *engine, int32_t key);
 
 void menu_callback(t_engine *engine, int32_t key) {
   switch (engine->menu) {
@@ -38,7 +41,7 @@ void menu_callback(t_engine *engine, int32_t key) {
       start_menu_callback(engine, key);
       break;
     case (LOOSE_MENU):
-      loose_menu_callback(key);
+      loose_menu_callback(engine, key);
       break;
     default:
       break;
@@ -126,6 +129,7 @@ static void win_menu_callback(t_engine *engine, int32_t key) {
     engine->menu = NO_MENU;
   } else if (key == KEY_RETURN && engine->selected_button == BUTTON2) {
     endwin();
+    free_scores(&engine->best_scores);
     exit(0);
   }
 }
@@ -139,6 +143,12 @@ static void start_menu_callback(t_engine *engine, int32_t key) {
     engine->menu = NO_MENU;
   } else if (key == KEY_RETURN && engine->selected_button == BUTTON2) {
     engine->menu = SCORES_MENU;
+    free_scores(&engine->best_scores);
+    if (read_scores(&engine->best_scores) == -1) {
+      endwin();
+      ft_putstr_fd("Error reading scores\n", STDERR_FILENO);
+      exit(1);
+    }
   } else if (key == KEY_LEFT && engine->selected_button == BUTTON3) {
     decrement_grid_size(engine);
   } else if (key == KEY_RIGHT && engine->selected_button == BUTTON3) {
@@ -147,6 +157,7 @@ static void start_menu_callback(t_engine *engine, int32_t key) {
     engine->menu = NO_MENU;
   } else if (key == KEY_RETURN && engine->selected_button == BUTTON4) {
     endwin();
+    free_scores(&engine->best_scores);
     exit(0);
   }
 }
@@ -315,9 +326,10 @@ static void print_loose_menu(t_engine *engine, int8_t selected) {
   attroff(COLOR_PAIR(COLOR_PAIR_MENU));
 }
 
-static void loose_menu_callback(int32_t key) {
+static void loose_menu_callback(t_engine *engine, int32_t key) {
   if (key == KEY_RETURN) {
     endwin();
+    free_scores(&engine->best_scores);
     exit(0);
   }
 }

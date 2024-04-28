@@ -17,11 +17,15 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "libft.h"
+
 #include "display.h"
 #include "engine.h"
 #include "grid.h"
+#include "scores.h"
 
-int main(void) {
+int main(int argc, char **argv) {
+
   setlocale(LC_ALL, "");
   uint8_t victory = false;
   initscr();
@@ -35,7 +39,16 @@ int main(void) {
   // init_color(COLOR_ID_2, 518, 890, 529);
   // init_pair(COLOR_PAIR_2, COLOR_BLACK, COLOR_ID_2);
   keypad(stdscr, TRUE);
-  t_engine engine = initialize_engine("bwisniew", 4);
+  t_engine engine;
+  if (argc >= 2) {
+    engine = initialize_engine(argv[1], 4);
+  } else {
+    engine = initialize_engine("undefined", 4);
+  }
+  if (read_scores(&engine.best_scores) == -1) {
+    ft_putstr_fd("Error reading scores\n", STDERR_FILENO);
+    return -1;
+  }
 
   place_random_tile(&engine);
   place_random_tile(&engine);
@@ -48,6 +61,10 @@ int main(void) {
     if (engine.menu == NO_MENU && play_move(&engine, c) &&
         (c == KEY_UP || c == KEY_DOWN || c == KEY_LEFT || c == KEY_RIGHT)) {
       place_random_tile(&engine);
+      if (update_scores(&engine.best_scores, engine.username, engine.score) == -1) {
+        ft_putstr_fd("Error updating scores\n", STDERR_FILENO);
+        return -1;
+      }
     } else {
       menu_callback(&engine, c);
     }

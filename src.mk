@@ -9,4 +9,5 @@ LIST_SRC		=	\
 					engine/grid.c			\
 					engine/initialize.c		\
 					engine/mouvement.c		\
+					engine/scores.c			\
 					main.c
