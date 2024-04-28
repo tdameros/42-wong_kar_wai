@@ -6,7 +6,7 @@
 /*   By: bwisniew <bwisniew@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 13:56:48 by bwisniew          #+#    #+#             */
-/*   Updated: 2024/04/28 21:48:31 by bwisniew         ###   ########.fr       */
+/*   Updated: 2024/04/28 22:16:12 by bwisniew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -369,12 +369,10 @@ static void print_score_menu(t_engine *engine, int8_t selected) {
     }
   }
 	
-(void)engine;
-	uint32_t score_size = 4;
-	for (uint32_t i = 0; i < score_size; i++)
+	for (uint32_t i = 0; i < engine->scores.nb_players; i++)
 	{
-  		mvprintw(y_start + 10 + 2 * i, x_start + ((size_x - (ft_nbrlen(32131) + ft_strlen("bwisniew") + 3)) / 2),
-		"%s : %d", "bwisniew", 32131);
+  		mvprintw(y_start + 10 + 2 * i, x_start + ((size_x - (ft_nbrlen(engine->scores.players[i].score) + ft_strlen(engine->scores.players[i].username) + 3)) / 2),
+		"%s : %d", engine->scores.players[i].username, engine->scores.players[i].score);
 		
 	}
 	
