@@ -6,7 +6,7 @@
 /*   By: bwisniew <bwisniew@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:51:00 by tdameros          #+#    #+#             */
-/*   Updated: 2024/04/28 15:47:05 by bwisniew         ###   ########.fr       */
+/*   Updated: 2024/04/28 19:05:00 by bwisniew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define SCORES_FILE ".scores"
 # define USERNAME_MAX_LENGTH 8
 # define USERNAME_BUFFER_SIZE (USERNAME_MAX_LENGTH + 1)
-
+#define NEW_TILE 2
 enum e_const
 {
 	WIN_VALUE = 8
