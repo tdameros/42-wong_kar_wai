@@ -6,7 +6,7 @@
 /*   By: bwisniew <bwisniew@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:51:00 by tdameros          #+#    #+#             */
-/*   Updated: 2024/04/28 19:05:00 by bwisniew         ###   ########.fr       */
+/*   Updated: 2024/04/28 21:02:46 by bwisniew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,15 @@
 # include "scores.h"
 
 # define MAX_GRID_SIZE 10
-# define MIN_GRID_SIZE 4
+# define MIN_GRID_SIZE 2
 # define GRID_BUFFER_SIZE (MAX_GRID_SIZE * MAX_GRID_SIZE)
 # define USERNAME_MAX_LENGTH 8
-# define SCORES_FILE ".scores"
 # define USERNAME_BUFFER_SIZE (USERNAME_MAX_LENGTH + 1)
-#define NEW_TILE 2
+# define NEW_TILE 2
 
 enum e_const
 {
-	WIN_VALUE = 8
+	WIN_VALUE = 2048
 };
 
 typedef struct s_engine
@@ -43,6 +42,7 @@ typedef struct s_engine
 	t_button selected_button;
 	bool win;
         t_scores best_scores;
+        bool started;
 } t_engine;
 
 t_engine initialize_engine(char *username, uint32_t grid_size);

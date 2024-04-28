@@ -32,12 +32,16 @@ void print_grid(t_engine *engine) {
 
   clear();
   getmaxyx(stdscr, height, width);
-
+  mvprintw(1, width - ft_nbrlen(engine->best_scores.players[0].score) - 14 - 2,
+           "Best score : %d", engine->best_scores.players[0].score);
+  mvprintw(2, width - ft_nbrlen(engine->score) - 9 - 2, "Score : %d",
+           engine->score);
   size = width / 2 > height ? height - GRID_MARGIN * 2
                             : width / 2 - GRID_MARGIN * 2;
   size -= size % engine->grid_size;
   uint32_t x_start = (width - size * 2) / 2;
   uint32_t y_start = (height - size) / 2;
+
   if (size / engine->grid_size > 6) {
     print_template(x_start, y_start, size, engine->grid_size);
     uint32_t tile_size = size / engine->grid_size;
@@ -51,7 +55,7 @@ void print_grid(t_engine *engine) {
         uint32_t ascii_size = get_ascii_len(value);
         uint32_t tile_x = x_start + x * (size * 2 / engine->grid_size);
         uint32_t tile_y = y_start + y * size / engine->grid_size;
-        if (value == 0 || ascii_size > tile_size * 2 + 4 || tile_size < 10)
+        if (value == 0 || tile_size * 2 < ascii_size + 2 || tile_size < 8)
           print_number(tile_x, tile_y, tile_size, value);
         else
           print_ascii(tile_x, tile_y, value, tile_size, ascii_size);
@@ -61,38 +65,26 @@ void print_grid(t_engine *engine) {
   }
 }
 
+uint32_t ft_nbrlen(uint32_t value) {
+  uint32_t value_size = 0;
+  while (value > 9) {
+    value /= 10;
+    value_size++;
+  }
+  return (value_size);
+}
+
 static void print_template(uint32_t x_start, uint32_t y_start, uint32_t size,
                            uint32_t grid_size) {
   for (uint32_t x = x_start; x < size * 2 + x_start + 1;
        x += (size * 2) / grid_size) {
     for (uint32_t y = y_start; y < size + y_start + 1; y++) {
-      mvprintw(y, x, "│");
+      mvprintw(y, x, " ");
     }
   }
   for (uint32_t y = y_start; y < size + y_start + 1; y += size / grid_size) {
     for (uint32_t x = x_start; x < size * 2 + x_start + 1; x++) {
-      if (y == y_start && x == x_start)
-        mvprintw(y, x, "┌");
-      else if (y == y_start && x == size * 2 + x_start)
-        mvprintw(y, x, "┐");
-      else if (y == size + y_start && x == x_start)
-        mvprintw(y, x, "└");
-      else if (y == size + y_start && x == size * 2 + x_start)
-        mvprintw(y, x, "┘");
-      else if (x == x_start)
-        mvprintw(y, x, "├");
-      else if (x == size * 2 + x_start)
-        mvprintw(y, x, "┤");
-      else if (y == y_start &&
-               x % (size * 2 / grid_size) == x_start % (size * 2 / grid_size))
-        mvprintw(y, x, "┬");
-      else if (y == size + y_start &&
-               x % (size * 2 / grid_size) == x_start % (size * 2 / grid_size))
-        mvprintw(y, x, "┴");
-      else if (x % (size * 2 / grid_size) == x_start % (size * 2 / grid_size))
-        mvprintw(y, x, "┼");
-      else
-        mvprintw(y, x, "─");
+      mvprintw(y, x, " ");
     }
   }
 }
