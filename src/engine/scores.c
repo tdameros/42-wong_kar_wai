@@ -43,7 +43,7 @@ int8_t read_scores(t_scores *scores) {
   }
   scores->nb_players = 0;
   char *line = get_next_line(fd);
-  while (line) {
+  for (uint8_t i = 0; i < 5 && line; i++) {
     char **split = ft_split(line, ' ');
     free(line);
     if (split == NULL) {
@@ -66,6 +66,7 @@ int8_t read_scores(t_scores *scores) {
     ft_free_split(split);
     line = get_next_line(fd);
   }
+  free(line);
   close(fd);
   if (errno != 0) {
     free_scores(scores);
