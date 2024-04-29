@@ -77,21 +77,26 @@ int8_t read_scores(t_scores *scores) {
 
 int8_t write_scores(t_scores *scores) {
   int32_t fd = open(SCORES_FILE, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+  uint32_t result = 0;
   if (fd < 0) {
     return -1;
   }
   for (uint32_t i = 0; i < scores->nb_players; i++) {
-    write(fd, scores->players[i].username,
-          ft_strlen(scores->players[i].username));
-    write(fd, " ", 1);
+    result += write(fd, scores->players[i].username,
+                    ft_strlen(scores->players[i].username)) != -1;
+    result += write(fd, " ", 1) != -1;
     char *score = ft_itoa(scores->players[i].score);
     if (score == NULL) {
       close(fd);
       return -1;
     }
-    write(fd, score, ft_strlen(score));
-    write(fd, "\n", 1);
+    result += write(fd, score, ft_strlen(score)) != -1;
+    result += write(fd, "\n", 1) != -1;
     free(score);
+    if (result != 4) {
+      close(fd);
+      return -1;
+    }
   }
   close(fd);
   return 0;
