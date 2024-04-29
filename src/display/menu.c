@@ -293,7 +293,7 @@ static void print_start_ascii(uint32_t x, uint32_t y) {
 }
 
 static void print_loose_menu(t_engine *engine, int8_t selected) {
-  (void) selected;
+  (void)selected;
   print_grid(engine);
   uint32_t height, width, size_x, size_y;
   getmaxyx(stdscr, height, width);
@@ -334,9 +334,7 @@ static void print_loose_menu(t_engine *engine, int8_t selected) {
     mvprintw(y_start + 5, x_start + ((size_x - 8) / 2), "You Win!");
   }
 
-
-	mvprintw(y_start + size_y - 3, x_start + ((size_x - 10) / 2), "» Exit «");
-
+  mvprintw(y_start + size_y - 3, x_start + ((size_x - 10) / 2), "» Exit «");
 
   attroff(COLOR_PAIR(COLOR_PAIR_MENU));
 }
