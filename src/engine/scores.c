@@ -82,6 +82,7 @@ int8_t write_scores(t_scores *scores) {
     return -1;
   }
   for (uint32_t i = 0; i < scores->nb_players; i++) {
+    result = 0;
     result += write(fd, scores->players[i].username,
                     ft_strlen(scores->players[i].username)) != -1;
     result += write(fd, " ", 1) != -1;
