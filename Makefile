@@ -93,3 +93,11 @@ check-format:
 .PHONY: format
 format:
 				clang-format -style=file $(SRC) -i
+
+.PHONY: build_docker_image
+build_docker_image:
+				docker build -t wong_kar_wai .
+
+.PHONY: run_docker_container
+run_docker_container:
+				docker run --rm -it wong_kar_wai
