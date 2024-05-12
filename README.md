@@ -21,7 +21,7 @@ make run
 ```bash
 make build_docker_image
 make run_docker_container
-make run
+2048
 ```
 
 ## Controls
