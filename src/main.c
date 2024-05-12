@@ -24,13 +24,17 @@
 #include "scores.h"
 
 int main(int argc, char **argv) {
-  if (!setlocale(LC_ALL, "")) return (1);
+  if (!setlocale(LC_ALL, "")) {
+    ft_putstr_fd("Error initializing ncurses\n", STDERR_FILENO);
+    return 1;
+  }
   initscr();
   if (assume_default_colors(COLOR_BLACK, COLOR_ID_BG) == ERR ||
       curs_set(0) == ERR || initialize_colors() < 0 ||
       keypad(stdscr, TRUE) == ERR) {
     endwin();
-    return (1);
+    ft_putstr_fd("Error initializing ncurses\n", STDERR_FILENO);
+    return 1;
   }
   t_engine engine;
   if (argc >= 2) {
@@ -41,7 +45,7 @@ int main(int argc, char **argv) {
   if (read_scores(&engine.best_scores) == -1) {
     ft_putstr_fd("Error reading scores\n", STDERR_FILENO);
     endwin();
-    return -1;
+    return 1;
   }
   int32_t c = 0;
   print_menu(engine.menu, &engine, engine.selected_button);
@@ -55,7 +59,7 @@ int main(int argc, char **argv) {
           -1) {
         ft_putstr_fd("Error updating scores\n", STDERR_FILENO);
         endwin();
-        return -1;
+        return 1;
       }
     } else {
       menu_callback(&engine, c);

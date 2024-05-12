@@ -42,6 +42,7 @@ int8_t read_scores(t_scores *scores) {
     return -1;
   }
   scores->nb_players = 0;
+  errno = 0;
   char *line = get_next_line(fd);
   for (uint8_t i = 0; i < 5 && line; i++) {
     char **split = ft_split(line, ' ');
