@@ -20,7 +20,7 @@ RUN apk update && \
     ncurses-libs \
     && rm -rf /var/cache/apk/*
 
-COPY --from=builder /app/2048 /usr/local/bin/
+COPY --from=builder /app/connect4 /usr/local/bin/
 
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8

@@ -1,6 +1,6 @@
 #*******************************  VARIABLES  **********************************#
 
-NAME			=	2048
+NAME			=	connect4
 
 # --------------- FILES --------------- #
 
@@ -96,8 +96,8 @@ format:
 
 .PHONY: build_docker_image
 build_docker_image:
-				docker build -t wong_kar_wai .
+				docker build -t connect4 .
 
 .PHONY: run_docker_container
 run_docker_container:
-				docker run --rm -it wong_kar_wai
+				docker run --rm -it connect4
